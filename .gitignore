@@ -1,0 +1,4 @@
+my_db_data/
+*.pem
+__pycache__/
+.env

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>강호전기 (江湖傳記)</title>
+    <style>
+        body { background-color: #1a1a1a; color: #d4af37; font-family: 'Noto Serif KR', serif; text-align: center; padding: 50px; }
+        .card { border: 2px solid #d4af37; padding: 20px; display: inline-block; background: #262626; box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
+        h1 { border-bottom: 1px solid #d4af37; padding-bottom: 10px; }
+        #data-box { font-size: 1.2rem; margin-top: 20px; color: #ffffff; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>[ 천하제일인 정보 ]</h1>
+        <div id="data-box">무림의 소식을 기다리는 중...</div>
+    </div>
+    <script>
+        // 백엔드(/api/status)에 무공 정보를 요청합니다.
+        fetch('/api/status')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('data-box').innerHTML = 
+                    `이름: ${data.name}<br>문파: ${data.school}<br>절기: ${data.skill}`;
+            })
+            .catch(() => { document.getElementById('data-box').innerText = "마교의 방해로 소식을 듣지 못했습니다."; });
+    </script>
+</body>
+</html>
