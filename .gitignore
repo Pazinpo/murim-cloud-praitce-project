@@ -2,3 +2,8 @@ my_db_data/
 *.pem
 __pycache__/
 .env
+
+# Terraform 관련 찌꺼기 방어
+**/.terraform/*
+*.tfstate
+*.tfstate.*
