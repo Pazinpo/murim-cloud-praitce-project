@@ -75,6 +75,23 @@ resource "aws_security_group" "murim_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # 🔥 3. [수정/추가] Nginx 포트 (8085번): 실제 서비스가 돌아가는 문!
+  # 8080번을 8085로 바꾸거나, 8085를 새로 추가하세요.
+  ingress {
+    from_port   = 8085
+    to_port     = 8085
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # 🚀 4. [추가] MariaDB (3306번): HeidiSQL 등으로 DB 직접 보고 싶을 때
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # 보안을 위해 대협의 IP만 넣는게 좋지만, 일단은 이렇게!
+  }
+
   # App (8080번 포트): 우리 스프링 부트 앱용
   ingress {
     from_port   = 8080
