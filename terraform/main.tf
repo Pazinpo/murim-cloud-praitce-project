@@ -104,9 +104,8 @@ resource "aws_instance" "murim_server" {
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.murim_sg.id]
 
-  # 어제 만든 키 페어 이름을 따옴표 안에 넣어주세요! 
-  # 예: key_name = "my-key" (확실치 않으면 일단 이 줄을 지워도 생성은 됩니다.)
-  # key_name = "여기에_어제_만든_키이름_적기"
+  # 어제 만든 키 페어 이름
+  key_name = "murim-key"
 
   tags = {
     Name = "Murim-Terraform-Server"
