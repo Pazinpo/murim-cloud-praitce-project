@@ -103,9 +103,21 @@ resource "aws_instance" "murim_server" {
 
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.murim_sg.id]
-
   # 어제 만든 키 페어 이름
   key_name = "murim-key"
+
+  user_data = <<-EOF
+#!/bin/bash
+sudo apt-get update -y
+sudo apt-get install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker ubuntu
+EOF
+
+
+  #[핵심] 주문서가 바뀌면 서버를 아예 새로 지으라는 명령
+  user_data_replace_on_change = true
 
   tags = {
     Name = "Murim-Terraform-Server"
