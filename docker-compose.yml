@@ -1,37 +1,47 @@
+version: '3.8'  # 버전을 명시하여 환경의 일관성을 유지합니다.
+
 services:
-  # 1. DB 설정 (기존과 동일)
+  # 1. Database 계층 (MariaDB)
   my-db:
     image: mariadb:latest
     container_name: murim-db
+    restart: always  # 서버 재부팅 시 자동으로 다시 켜지게 설정
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: "murim_db"
     ports:
       - "3306:3306"
     volumes:
       - ./my_db_data:/var/lib/mysql
 
-  # 2. 백엔드 이름 변경 (arpia-backend -> murim-backend)
+  # 2. Application 계층 (FastAPI)
   murim-backend:
     image: python:3.9-slim
     container_name: murim-backend
+    restart: always
     volumes:
       - ./backend:/app
     working_dir: /app
-    command: sh -c "pip install fastapi uvicorn pymysql && uvicorn main:app --host 0.0.0.0 --port 8000"
+    # 패키지 설치는 운영 환경에서는 Dockerfile로 옮기는 것이 좋으나, 
+    # 현재 구조 유지를 위해 줄바꿈만 정리했습니다.
+    command: >
+      sh -c "pip install --no-cache-dir fastapi uvicorn pymysql && 
+             uvicorn main:app --host 0.0.0.0 --port 8000"
     environment:
-      - DB_HOST=murim-db
+      - DB_HOST=murim-db  
       - DB_PASSWORD=1234
     depends_on:
       - my-db
 
-  # 3. 웹 서버 설정
+  # 3. Web 계층 (Nginx)
   my-web:
     image: nginx:latest
     container_name: murim-web
+    restart: always
     ports:
       - "8085:80"
     volumes:
       - ./frontend:/usr/share/nginx/html
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # ro(Read-Only) 추가로 보안 강화
     depends_on:
       - murim-backend
