@@ -15,7 +15,7 @@ resource "aws_vpc" "murim_vpc" {
 
 # 3. 영토 안의 '구역(Subnet)' 나누기
 resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.murim_vpc.id  # 아까 만든 VPC의 ID를 자동으로 끌어옵니다!
+  vpc_id                  = aws_vpc.murim_vpc.id  # 아까 만든 VPC의 ID를 자동으로 끌어옴
   cidr_block              = "10.0.1.0/24"         # 10.0.0.0/16 영토 안의 더 작은 구역
   availability_zone       = "ap-northeast-2a"     # 서울의 a구역 데이터센터 사용
   map_public_ip_on_launch = true                  # 이 구역에 지어지는 집(서버)은 외부 주소(공인 IP)를 받음
