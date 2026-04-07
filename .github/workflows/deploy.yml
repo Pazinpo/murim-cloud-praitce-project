@@ -2,7 +2,7 @@ name: Deploy to AWS EC2
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]  # main 브랜치에 푸시될 때 전령 출격!
 
 jobs:
   deploy:
@@ -18,7 +18,20 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            # 1. 홈 디렉토리로 이동
+            cd ~
+
+            # 2. 만약 폴더가 없으면 처음으로 복제(Clone), 있으면 건너뛰기
+            if [ ! -d "murim-cloud-praitce-project" ]; then
+              echo "성채에 처음 오셨군요! 짐을 풀겠습니다(Clone)..."
+              git clone https://github.com/Pazinpo/murim-cloud-praitce-project.git
+            fi
+
+            # 3. 폴더로 진입하여 최신 비급 가져오기
             cd ~/murim-cloud-praitce-project
             git pull origin main
-            docker compose up -d --build
-            echo "CI/CD완료!"
+
+            # 4. 일꾼(Docker) 소집 및 기동
+            sudo docker compose up -d --build
+
+            echo "CI/CD 완료!!"
