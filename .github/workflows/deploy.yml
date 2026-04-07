@@ -32,6 +32,6 @@ jobs:
             git pull origin main
 
             # 4. 일꾼(Docker) 소집 및 기동
-            sudo docker compose up -d --build
+            sudo docker-compose up -d --build
 
             echo "CI/CD 완료!!"

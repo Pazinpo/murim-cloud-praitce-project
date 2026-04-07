@@ -108,10 +108,18 @@ resource "aws_instance" "murim_server" {
 
   user_data = <<-EOF
 #!/bin/bash
+# 1. 패키지 목록 업데이트
 sudo apt-get update -y
-sudo apt-get install -y docker.io
+
+# 2. 도커와 도커 컴포즈를 한 번에 설치 (중복 제거)
+sudo apt-get install -y docker.io docker-compose
+
+# 3. 도커 서비스 기동 및 자동 실행 설정
 sudo systemctl start docker
 sudo systemctl enable docker
+
+# 4. ubuntu 유저에게 도커 권한 부여
+# (이 주문이 있어야 나중에 sudo 없이도 도커를 부릴 수 있습니다)
 sudo usermod -aG docker ubuntu
 EOF
 
